@@ -1,12 +1,12 @@
 import express from 'express';
 
 import './db';
+import routes from './routes';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  return res.json({ message: 'TEst' });
-});
+app.use(express.json());
+app.use(routes);
 
 const PORT = 3000;
 
