@@ -1,6 +1,4 @@
 import { Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
-import SettingRepository from '../repositories/SettingRepository';
 import SettingService from '../services/SettingService';
 
 class SettingController {
