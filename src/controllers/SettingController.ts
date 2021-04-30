@@ -15,6 +15,25 @@ class SettingController {
 
     return response.json(settings);
   }
+
+  async findByUsername(request: Request, response: Response) {
+    const { username } = request.params;
+
+    const settingService = new SettingService();
+
+    const settings = await settingService.findByUsername(username);
+
+    return response.json(settings);
+  }
+
+  async update(request: Request, response: Response) {
+    const { username } = request.params;
+    const { chat } = request.body;
+
+    const settingService = new SettingService();
+
+    await settingService.update(username, chat);
+  }
 }
 
 export default SettingController;
