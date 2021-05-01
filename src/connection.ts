@@ -15,8 +15,12 @@ app.set('views', path.join(__dirname, '..', 'public'));
 app.engine('html', renderFile);
 app.set('view engine', 'html');
 
-app.get('/', (req, res) => {
+app.get('/pages/client', (req, res) => {
   return res.render('html/client.html');
+});
+
+app.get('/pages/admin', (req, res) => {
+  return res.render('html/admin.html');
 });
 
 const http = createServer(app);

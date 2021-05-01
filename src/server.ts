@@ -1,5 +1,6 @@
-import { http } from "./connection";
+import { http } from './connection';
 import './websocket/clientws';
+import './websocket/adminws';
 
 const PORT = 3000;
 
