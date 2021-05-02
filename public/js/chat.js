@@ -1,3 +1,7 @@
+let adminSocketId = null;
+let userEmail = null;
+let socket = null;
+
 document.querySelector('#start_chat').addEventListener('click', (event) => {
   const chatHelp = document.getElementById('chat_help');
   chatHelp.style.display = 'none';
@@ -5,9 +9,10 @@ document.querySelector('#start_chat').addEventListener('click', (event) => {
   const chatInSupport = document.getElementById('chat_in_support');
   chatInSupport.style.display = 'block';
 
-  const socket = io();
+  socket = io();
 
   const email = document.getElementById('email').value;
+  userEmail = email;
   const text = document.getElementById('txt_help').value;
 
   socket.on('connect', () => {
@@ -25,7 +30,7 @@ document.querySelector('#start_chat').addEventListener('click', (event) => {
     const templateClient = document.getElementById('message-user-template').innerHTML;
     const templateAdmin = document.getElementById('admin-template').innerHTML;
 
-    messages.array.forEach((msg) => {
+    messages.forEach((msg) => {
       if (msg.admin_id === null) {
         const rendered = Mustache.render(templateClient, {
           message: msg.text,
@@ -42,4 +47,34 @@ document.querySelector('#start_chat').addEventListener('click', (event) => {
       }
     });
   });
+
+  socket.on('admin_send_to_client', (message) => {
+    adminSocketId = message.socket_id;
+    const templateAdmin = document.getElementById('admin-template').innerHTML;
+
+    const rendered = Mustache.render(templateAdmin, {
+      message_admin: message.text,
+    });
+
+    document.getElementById('messages').innerHTML += rendered;
+  });
+});
+
+document.getElementById('send_message_button').addEventListener('click', (evt) => {
+  const text = document.getElementById('message_user');
+
+  const params = {
+    text: text.value,
+    adminSocketId,
+  };
+
+  socket.emit('client_send_to_admin', params);
+
+  const templateClient = document.getElementById('message-user-template').innerHTML;
+  const rendered = Mustache.render(templateClient, {
+    message: text.value,
+    email: userEmail,
+  });
+
+  document.getElementById('messages').innerHTML += rendered;
 });

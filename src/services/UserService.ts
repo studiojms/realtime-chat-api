@@ -11,13 +11,13 @@ class UserService {
   }
 
   async create(email: string) {
-    const existingUser = this.findByEmail(email);
+    const existingUser = await this.findByEmail(email);
 
     if (existingUser) {
       return existingUser;
     }
 
-    const newUser = this.userRepository.create({ email });
+    const newUser = await this.userRepository.create({ email });
 
     await this.userRepository.save(newUser);
 
